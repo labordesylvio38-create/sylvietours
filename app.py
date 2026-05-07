@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, flash, render_template, request, redirect, url_for, send_file
 import sqlite3
 import os
 from datetime import datetime
@@ -700,6 +700,23 @@ def generer_facture(mission_id):
 def service_worker():
     return app.send_static_file('sw.js')
 
+@app.route('/enregistrer_mission/<int:mission_id>', methods=['POST'])
+def enregistrer_mission(mission_id):
+
+    conn = sqlite3.connect('sylvietours.db')
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE missions
+        SET statut = 'En cours'
+        WHERE id = ?
+    """, (mission_id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('accueil'))
+
 if __name__ == '__main__':
     init_db()
     os.makedirs('templates', exist_ok=True)
@@ -710,3 +727,5 @@ if __name__ == '__main__':
     except:
         pass
     app.run(debug=True, host='0.0.0.0', port=5000)
+
+    

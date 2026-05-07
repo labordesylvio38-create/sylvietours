@@ -132,8 +132,21 @@
             {% endif %}
         </div>
 
-        <div class="total-general">💶 Total : {{ "{:,.2f}".format(total) }} €</div>
-        <a href="/facture/{{ mission[0] }}" class="btn-facture">📄 Générer la Facture PDF</a>
-    </div>
+       <div class="total-general">💶 Total : {{ "{:,.2f}".format(total) }} €</div>
+
+<a href="/facture/{{ mission[0] }}" class="btn-facture">
+    📄 Générer la Facture PDF
+</a>
+
+<div class="save-container">
+    <form method="POST" action="/enregistrer_mission/{{ mission[0] }}">
+        <button type="submit" class="btn-facture btn-save">
+            💾 Enregistrer la Mission
+        </button>
+    </form>
+</div>
+
+</div>
+
 </body>
 </html>
