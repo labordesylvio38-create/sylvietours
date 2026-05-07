@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packs d'eau</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#1a3c6e">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
+        .header { background: linear-gradient(135deg, #1a3c6e 0%, #2a6cb5 100%); color: white; box-shadow: 0 4px 15px rgba(26,60,110,0.4); }
+        .header-logo { width: 100%; height: 80px; object-fit: cover; display: block; }
+        .header-text { padding: 10px 15px 15px; text-align: center; }
+        .header-text h1 { font-size: 17px; font-weight: bold; }
+        .container { padding: 15px; max-width: 700px; margin: auto; padding-bottom: 40px; }
+        .btn-retour { display: inline-flex; align-items: center; gap: 5px; color: #1a3c6e; text-decoration: none; font-size: 14px; font-weight: bold; padding: 10px 0; }
+        .card { background: white; border-radius: 16px; padding: 16px; margin-top: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
+        .card-title { font-size: 15px; font-weight: bold; color: #1a3c6e; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #e8f0fe; }
+        .form-group { margin-bottom: 10px; }
+        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #555; }
+        input, select { width: 100%; padding: 11px 12px; border: 2px solid #e8e8e8; border-radius: 10px; font-size: 14px; }
+        input:focus, select:focus { outline: none; border-color: #1a3c6e; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+        .btn { display: block; background: linear-gradient(135deg, #1a3c6e, #2a6cb5); color: white; padding: 13px; border-radius: 10px; font-size: 15px; font-weight: bold; border: none; cursor: pointer; width: 100%; text-align: center; margin-top: 10px; text-decoration: none; }
+        .btn-danger { background: #ffebee; color: #c62828; padding: 7px 11px; border-radius: 8px; text-decoration: none; font-size: 13px; }
+        .btn-pdf { background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 7px 11px; border-radius: 8px; text-decoration: none; font-size: 13px; }
+        .btn-payer { padding: 7px 11px; border-radius: 8px; text-decoration: none; font-size: 13px; border: none; cursor: pointer; }
+        .btn-payer.paye { background: #e8f5e9; color: #2e7d32; }
+        .btn-payer.nonpaye { background: #fff8e1; color: #f57f17; }
+        .eau-item { background: #f8f9ff; border-radius: 10px; padding: 12px; margin-top: 10px; border-left: 4px solid #2196f3; }
+        .eau-item.paye { border-left-color: #28a745; }
+        .eau-item.nonpaye { border-left-color: #f39c12; }
+        .eau-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .eau-header strong { font-size: 14px; color: #1a3c6e; }
+        .eau-body { margin-top: 6px; }
+        .eau-body span { font-size: 12px; color: #666; display: block; margin-top: 3px; }
+        .eau-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+        .mission-tag { background: #e8f0fe; color: #1a3c6e; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: bold; }
+        .total-badge { padding: 4px 12px; border-radius: 10px; font-size: 13px; font-weight: bold; }
+        .badge-paye { background: #e8f5e9; color: #2e7d32; }
+        .badge-nonpaye { background: #fff8e1; color: #f57f17; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .stat-box { background: white; border-radius: 12px; padding: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .stat-box strong { display: block; font-size: 22px; color: #1a3c6e; }
+        .stat-box span { font-size: 11px; color: #888; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="/static/logo.jpg" class="header-logo" alt="Logo">
+        <div class="header-text"><h1>💧 Packs d'eau</h1></div>
+    </div>
+    <div class="container">
+        <a href="/" class="btn-retour">← Retour à l'accueil</a>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <strong>{{ eaux|length }}</strong>
+                <span>Total factures</span>
+            </div>
+            <div class="stat-box" style="border-top: 3px solid #28a745;">
+                <strong style="color:#28a745;">{{ eaux|selectattr('9', 'equalto', 'payé')|list|length }}</strong>
+                <span>Payées ✅</span>
+            </div>
+            <div class="stat-box" style="border-top: 3px solid #f39c12;">
+                <strong style="color:#f39c12;">{{ eaux|selectattr('9', 'equalto', 'non payé')|list|length }}</strong>
+                <span>Non payées ⏳</span>
+            </div>
+        </div>
+
+        <!-- Formulaire -->
+        <div class="card">
+            <div class="card-title">➕ Nouvelle facture eau</div>
+            <form method="POST" action="/ajouter_eau">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>📋 Mission</label>
+                        <select name="mission_id" required>
+                            <option value="">-- Choisir --</option>
+                            {% for m in missions %}
+                            <option value="{{ m[0] }}">{{ m[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>👤 Client (DIO...)</label>
+                        <input type="text" name="client" placeholder="Ex: DIO GRIP IVATO" required>
+                    </div>
+                    <div class="form-group">
+                        <label>🔢 N° Facture</label>
+                        <input type="text" name="numero_facture" placeholder="Ex: EAU-001/26">
+                    </div>
+                    <div class="form-group">
+                        <label>📅 Date début</label>
+                        <input type="date" name="date_debut" required>
+                    </div>
+                    <div class="form-group">
+                        <label>📅 Date fin</label>
+                        <input type="date" name="date_fin" required>
+                    </div>
+                    <div class="form-group">
+                        <label>💧 Désignation</label>
+                        <input type="text" name="designation" placeholder="Ex: Eau Vive 1,5L" required>
+                    </div>
+                    <div class="form-group">
+                        <label>💶 Prix unitaire (€)</label>
+                        <input type="text" name="prix_unitaire" placeholder="Ex: 4.60" required>
+                    </div>
+                    <div class="form-group">
+                        <label>📦 Nbre de paquets</label>
+                        <input type="number" name="nb_paquets" placeholder="Ex: 20" min="1" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn">✅ Ajouter</button>
+            </form>
+        </div>
+
+        <!-- Liste -->
+        <div class="card">
+            <div class="card-title">📋 Toutes les factures eau</div>
+            {% if eaux %}
+                {% for e in eaux %}
+                <div class="eau-item {{ 'paye' if e[9] == 'payé' else 'nonpaye' }}">
+                    <div class="eau-header">
+                        <strong>💧 {{ e[7] }}</strong>
+                        <span class="total-badge {{ 'badge-paye' if e[9] == 'payé' else 'badge-nonpaye' }}">
+                            {{ '✅ Payé' if e[9] == 'payé' else '⏳ Non payé' }}
+                        </span>
+                    </div>
+                    <div class="eau-body">
+                        <span>📅 {{ e[2] }} → {{ e[3] }}</span>
+                        <span>💧 {{ e[4] }} × {{ e[5] }}€ | {{ e[6] }} paquets</span>
+                        <span>💶 Total : <b>{{ "{:,.2f}".format(e[5]*e[6]) }} €</b></span>
+                        <span class="mission-tag">📋 {{ e[10] }}</span>
+                    </div>
+                    <div class="eau-actions">
+                        <a href="/facture_eau/{{ e[0] }}" class="btn-pdf">📄 PDF</a>
+                        <a href="/payer_eau/{{ e[0] }}" class="btn-payer {{ 'paye' if e[9] == 'payé' else 'nonpaye' }}">
+                            {{ '↩️ Marquer non payé' if e[9] == 'payé' else '✅ Marquer payé' }}
+                        </a>
+                        <a href="/supprimer_eau/{{ e[0] }}" class="btn-danger" onclick="return confirm('Supprimer ?')">🗑️</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align:center; color:#aaa; padding:20px;">Aucune facture eau enregistrée.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

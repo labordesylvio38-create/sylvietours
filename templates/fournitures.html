@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packs d'eau & SIM</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#1a3c6e">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
+        .header { background: linear-gradient(135deg, #1a3c6e 0%, #2a6cb5 100%); color: white; box-shadow: 0 4px 15px rgba(26,60,110,0.4); }
+        .header-logo { width: 100%; height: 80px; object-fit: cover; display: block; }
+        .header-text { padding: 10px 15px 15px; text-align: center; }
+        .header-text h1 { font-size: 17px; font-weight: bold; }
+        .container { padding: 15px; max-width: 600px; margin: auto; padding-bottom: 40px; }
+        .btn-retour { display: inline-flex; align-items: center; gap: 5px; color: #1a3c6e; text-decoration: none; font-size: 14px; font-weight: bold; padding: 10px 0; margin-bottom: 5px; }
+        .card { background: white; border-radius: 16px; padding: 16px; margin-top: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
+        .card-title { font-size: 15px; font-weight: bold; color: #1a3c6e; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #e8f0fe; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input, select, textarea { width: 100%; padding: 11px 12px; border: 2px solid #e8e8e8; border-radius: 10px; font-size: 14px; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #1a3c6e; }
+        .btn { display: block; background: linear-gradient(135deg, #1a3c6e, #2a6cb5); color: white; padding: 13px; border-radius: 10px; font-size: 15px; font-weight: bold; border: none; cursor: pointer; width: 100%; text-align: center; margin-top: 10px; }
+        .fourniture-item { background: #f8f9ff; border-radius: 10px; padding: 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid #1a3c6e; flex-wrap: wrap; gap: 8px; }
+        .fourniture-info strong { font-size: 13px; color: #1a3c6e; display: block; }
+        .fourniture-info span { font-size: 11px; color: #888; }
+        .btn-danger { background: #ffebee; color: #c62828; padding: 7px 11px; border-radius: 8px; text-decoration: none; font-size: 13px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        .stat-box { background: white; border-radius: 12px; padding: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .stat-box strong { display: block; font-size: 22px; color: #1a3c6e; }
+        .stat-box span { font-size: 11px; color: #888; }
+        .mission-tag { background: #e8f0fe; color: #1a3c6e; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="/static/logo.jpg" class="header-logo" alt="Logo">
+        <div class="header-text"><h1>💧 Packs d'eau & Cartes SIM</h1></div>
+    </div>
+
+    <div class="container">
+        <a href="/" class="btn-retour">← Retour à l'accueil</a>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <strong>{{ fournitures|selectattr('2', 'equalto', "Pack d'eau")|list|length }}</strong>
+                <span>Missions avec eau</span>
+            </div>
+            <div class="stat-box">
+                <strong>{{ fournitures|selectattr('2', 'equalto', 'Carte SIM')|list|length }}</strong>
+                <span>Missions avec SIM</span>
+            </div>
+        </div>
+
+        <!-- Liste -->
+        <div class="card">
+            <div class="card-title">📋 Toutes les fournitures</div>
+            {% if fournitures %}
+                {% for f in fournitures %}
+                <div class="fourniture-item">
+                    <div class="fourniture-info">
+                        <strong>{{ f[2] }}</strong>
+                        <span>{{ f[3] }} unité(s) {% if f[4] %}• {{ f[4] }}{% endif %}</span>
+                        <span class="mission-tag">📋 {{ f[5] }}</span>
+                    </div>
+                    <a href="/supprimer_fourniture/{{ f[0] }}/{{ f[1] }}" class="btn-danger">🗑️</a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align:center; color:#aaa; padding:20px;">Aucune fourniture enregistrée.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier Véhicule</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#1a3c6e">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
+        .header { background: linear-gradient(135deg, #1a3c6e 0%, #2a6cb5 100%); color: white; box-shadow: 0 4px 15px rgba(26,60,110,0.4); }
+        .header-logo { width: 100%; height: 80px; object-fit: cover; display: block; }
+        .header-text { padding: 10px 15px 15px; text-align: center; }
+        .header-text h1 { font-size: 17px; font-weight: bold; }
+        .container { padding: 15px; max-width: 600px; margin: auto; padding-bottom: 40px; }
+        .card { background: white; border-radius: 16px; padding: 20px; margin-top: 18px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
+        .card-title { font-size: 16px; font-weight: bold; color: #1a3c6e; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #e8f0fe; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px; color: #555; }
+        input, select { width: 100%; padding: 13px 14px; border: 2px solid #e8e8e8; border-radius: 10px; font-size: 15px; }
+        input:focus, select:focus { outline: none; border-color: #1a3c6e; }
+        .btn { display: block; background: linear-gradient(135deg, #1a3c6e, #2a6cb5); color: white; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; width: 100%; text-align: center; margin-top: 10px; }
+        .btn-retour { display: block; text-align: center; color: #1a3c6e; text-decoration: none; font-size: 14px; margin-top: 15px; padding: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="/static/logo.jpg" class="header-logo" alt="Logo">
+        <div class="header-text"><h1>✏️ Modifier Véhicule</h1></div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-title">🚗 Modifier le véhicule</div>
+            <form method="POST">
+                <div class="form-group"><label>Itinéraire</label><input type="text" name="itineraire" value="{{ veh[2] }}" required></div>
+                <div class="form-group"><label>Type de voiture</label>
+                    <select name="type_voiture">
+                        <option {% if veh[3] == '4x4' %}selected{% endif %}>4x4</option>
+                        <option {% if veh[3] == 'Mini-bus' %}selected{% endif %}>Mini-bus</option>
+                        <option {% if veh[3] == 'Berline' %}selected{% endif %}>Berline</option>
+                        <option {% if veh[3] == 'Bus' %}selected{% endif %}>Bus</option>
+                        <option {% if veh[3] == 'Autre' %}selected{% endif %}>Autre</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Nbre voitures</label><input type="number" name="nb_voitures" value="{{ veh[4] }}" min="1" required></div>
+                <div class="form-group"><label>Nbre jours</label><input type="number" name="nb_jours" value="{{ veh[5] }}" min="1" required></div>
+                <div class="form-group"><label>Tarif/jour (€)</label><input type="number" name="tarif_jour" value="{{ veh[6] }}" min="0" step="0.01" required></div>
+                <button type="submit" class="btn">✅ Sauvegarder</button>
+            </form>
+            <a href="/mission/{{ veh[1] }}" class="btn-retour">← Retour</a>
+        </div>
+    </div>
+</body>
+</html>

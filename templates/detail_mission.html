@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Mission</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#1a3c6e">
+    <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
+        .header { background: linear-gradient(135deg, #1a3c6e 0%, #2a6cb5 100%); color: white; box-shadow: 0 4px 15px rgba(26,60,110,0.4); }
+        .header-logo { width: 100%; height: 80px; object-fit: cover; display: block; }
+        .header-text { padding: 10px 15px 15px; text-align: center; }
+        .header-text h1 { font-size: 17px; font-weight: bold; }
+        .container { padding: 15px; max-width: 700px; margin: auto; padding-bottom: 40px; }
+        .btn-retour { display: inline-flex; align-items: center; gap: 5px; color: #1a3c6e; text-decoration: none; font-size: 14px; font-weight: bold; padding: 10px 0; }
+        .card { background: white; border-radius: 16px; padding: 16px; margin-top: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
+        .card-title { font-size: 15px; font-weight: bold; color: #1a3c6e; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #e8f0fe; }
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px; }
+        .info-box { background: #f0f4ff; border-radius: 10px; padding: 12px; text-align: center; }
+        .info-box p { font-size: 11px; color: #888; }
+        .info-box strong { font-size: 13px; color: #1a3c6e; display: block; margin-top: 4px; }
+        .form-group { margin-bottom: 10px; }
+        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #555; }
+        input, select { width: 100%; padding: 11px 12px; border: 2px solid #e8e8e8; border-radius: 10px; font-size: 14px; }
+        input:focus, select:focus { outline: none; border-color: #1a3c6e; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+        .btn { display: block; background: linear-gradient(135deg, #1a3c6e, #2a6cb5); color: white; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; border: none; cursor: pointer; width: 100%; text-align: center; margin-top: 10px; text-decoration: none; }
+        .btn-warning { background: linear-gradient(135deg, #f39c12, #f1c40f); color: white; padding: 7px 11px; border-radius: 8px; text-decoration: none; font-size: 13px; }
+        .btn-danger { background: #ffebee; color: #c62828; padding: 7px 11px; border-radius: 8px; text-decoration: none; font-size: 13px; }
+        .btn-modifier { display: block; background: linear-gradient(135deg, #f39c12, #f1c40f); color: white; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; text-align: center; text-decoration: none; margin-top: 8px; }
+        .btn-facture { display: block; background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: bold; text-align: center; text-decoration: none; margin-top: 16px; box-shadow: 0 5px 15px rgba(40,167,69,0.3); }
+        .ressource-item { background: #f8f9ff; border-radius: 10px; padding: 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; border-left: 3px solid #1a3c6e; flex-wrap: wrap; }
+        .ressource-info { flex: 1; }
+        .ressource-info strong { font-size: 13px; color: #1a3c6e; display: block; }
+        .ressource-info span { font-size: 11px; color: #888; margin-top: 2px; display: block; }
+        .ressource-total { font-weight: bold; font-size: 14px; color: #1a3c6e; white-space: nowrap; }
+        .action-btns { display: flex; gap: 5px; }
+        .sous-total { text-align: right; font-weight: bold; font-size: 14px; color: #1a3c6e; padding: 10px 0 4px; border-top: 1px solid #eee; margin-top: 10px; }
+        .total-general { background: linear-gradient(135deg, #1a3c6e, #2a6cb5); color: white; padding: 16px 20px; border-radius: 14px; text-align: right; font-size: 20px; font-weight: bold; margin-top: 16px; }
+        .chauffeur-tag { background: #e8f0fe; color: #1a3c6e; padding: 2px 8px; border-radius: 8px; font-size: 11px; display: inline-block; margin-top: 3px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="/static/logo.jpg" class="header-logo" alt="Logo">
+        <div class="header-text"><h1>{{ mission[1] }}</h1></div>
+    </div>
+    <div class="container">
+        <a href="/" class="btn-retour">← Retour</a>
+
+        <div class="card">
+            <div class="card-title">📋 Informations</div>
+            <div class="info-grid">
+                <div class="info-box"><p>🎖️ Chef de détachement</p><strong>{{ mission[2] }}</strong></div>
+                <div class="info-box"><p>🔢 N° Facture</p><strong>{{ mission[7] or '-' }}</strong></div>
+                <div class="info-box"><p>👥 Personnes</p><strong>{{ mission[3] }}</strong></div>
+                <div class="info-box"><p>📊 Statut</p><strong>{{ mission[6] }}</strong></div>
+                <div class="info-box" style="grid-column: span 2;"><p>📅 Période</p><strong>{{ mission[4] }} → {{ mission[5] }}</strong></div>
+            </div>
+            <a href="/modifier_mission/{{ mission[0] }}" class="btn-modifier">✏️ Modifier la mission</a>
+        </div>
+
+        <!-- Hébergements -->
+        <div class="card">
+            <div class="card-title">🏨 Hébergements</div>
+            <form method="POST" action="/ajouter_hebergement/{{ mission[0] }}">
+                <div class="form-grid">
+                    <div class="form-group"><label>Hôtel</label><input type="text" name="hotel" placeholder="Ex: HOTEL VOHITRA" required></div>
+                    <div class="form-group"><label>Nbre nuitées</label><input type="number" name="nb_nuits" placeholder="Ex: 5" min="1" required></div>
+                    <div class="form-group"><label>Désignation</label><input type="text" name="designation" placeholder="Chambre + petit déj."></div>
+                    <div class="form-group"><label>Nbre chambres</label><input type="text" name="nb_chambres" placeholder="Ex: 07 doubles"></div>
+                    <div class="form-group"><label>Tarif/nuitée (€)</label><input type="text" name="tarif_nuit" placeholder="Ex: 42.50" required></div>
+                </div>
+                <button type="submit" class="btn">➕ Ajouter hébergement</button>
+            </form>
+            {% if hebergements %}
+                {% for h in hebergements %}
+                <div class="ressource-item">
+                    <div class="ressource-info">
+                        <strong>🏨 {{ h[2] }}</strong>
+                        <span>{{ h[3] }} nuits • {{ h[4] }} • {{ h[5] }} • {{ h[6] }}€/nuit</span>
+                    </div>
+                    <div class="ressource-total">{{ "{:,.2f}".format(h[3] * h[6]) }} €</div>
+                    <div class="action-btns">
+                        <a href="/modifier_hebergement/{{ h[0] }}" class="btn-warning">✏️</a>
+                        <a href="/supprimer_hebergement/{{ h[0] }}/{{ mission[0] }}" class="btn-danger">🗑️</a>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="sous-total">Sous total : {{ "{:,.2f}".format(total_heb) }} €</div>
+            {% endif %}
+        </div>
+
+        <!-- Véhicules -->
+        <div class="card">
+            <div class="card-title">🚗 Véhicules</div>
+            <form method="POST" action="/ajouter_vehicule/{{ mission[0] }}">
+                <div class="form-grid">
+                    <div class="form-group"><label>Itinéraire</label><input type="text" name="itineraire" placeholder="Ex: IVATO" required></div>
+                    <div class="form-group"><label>Type</label>
+                        <select name="type_voiture">
+                            <option>4x4</option><option>Mini-bus</option><option>Berline</option><option>Bus</option><option>Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Nbre voitures</label><input type="number" name="nb_voitures" placeholder="Ex: 3" min="1" required></div>
+                    <div class="form-group"><label>Nbre jours</label><input type="number" name="nb_jours" placeholder="Ex: 7" min="1" required></div>
+                    <div class="form-group"><label>Tarif/jour (€)</label><input type="text" name="tarif_jour" placeholder="Ex: 50.50" required></div>
+                    <div class="form-group"><label>🧑‍✈️ Noms chauffeurs</label><input type="text" name="noms_chauffeurs" placeholder="Ex: Jean, Marc"></div>
+                    <div class="form-group"><label>Nbre chauffeurs</label><input type="number" name="nb_chauffeurs" placeholder="Ex: 2" min="0"></div>
+                </div>
+                <button type="submit" class="btn">➕ Ajouter véhicule</button>
+            </form>
+            {% if vehicules %}
+                {% for v in vehicules %}
+                <div class="ressource-item">
+                    <div class="ressource-info">
+                        <strong>🚗 {{ v[3] }} - {{ v[2] }}</strong>
+                        <span>{{ v[4] }} voiture(s) • {{ v[5] }} jours • {{ v[6] }}€/jour</span>
+                        {% if v[7] %}<span class="chauffeur-tag">🧑‍✈️ {{ v[7] }} ({{ v[8] }} chauffeur(s))</span>{% endif %}
+                    </div>
+                    <div class="ressource-total">{{ "{:,.2f}".format(v[4] * v[5] * v[6]) }} €</div>
+                    <div class="action-btns">
+                        <a href="/modifier_vehicule/{{ v[0] }}" class="btn-warning">✏️</a>
+                        <a href="/supprimer_vehicule/{{ v[0] }}/{{ mission[0] }}" class="btn-danger">🗑️</a>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="sous-total">Sous total : {{ "{:,.2f}".format(total_veh) }} €</div>
+            {% endif %}
+        </div>
+
+        <div class="total-general">💶 Total : {{ "{:,.2f}".format(total) }} €</div>
+        <a href="/facture/{{ mission[0] }}" class="btn-facture">📄 Générer la Facture PDF</a>
+    </div>
+</body>
+</html>
