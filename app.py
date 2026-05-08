@@ -703,21 +703,22 @@ def service_worker():
 @app.route('/enregistrer_mission/<int:mission_id>', methods=['POST'])
 def enregistrer_mission(mission_id):
 
-    conn = sqlite3.connect('sylvietours.db')
+    conn = sqlite3.connect(DB)
     cursor = conn.cursor()
 
     cursor.execute("""
-    UPDATE missions
-    SET statut = 'Terminée'
-    WHERE id = ?
-""", (mission_id,))
-    
+        UPDATE missions
+        SET statut = 'Terminée'
+        WHERE id = ?
+    """, (mission_id,))
+
     conn.commit()
     conn.close()
 
     return redirect(url_for('accueil'))
 
-conn = sqlite3.connect('sylvietours.db')
+
+conn = sqlite3.connect(DB)
 cursor = conn.cursor()
 
 try:
