@@ -10,50 +10,271 @@
     <meta name="apple-mobile-web-app-title" content="Sylvie Tours">
     <link rel="apple-touch-icon" href="/static/logo_rond.jpg">
     <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js');}</script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f0f4f8; color: #333; }
-        .header { background: linear-gradient(135deg, #1a3c6e 0%, #2a6cb5 100%); color: white; box-shadow: 0 4px 15px rgba(26,60,110,0.4); }
-        .header-logo { width: 100%; height: 80px; object-fit: cover; display: block; }
-        .header-text { padding: 10px 15px 15px; text-align: center; }
-        .header-text h1 { font-size: 17px; font-weight: bold; }
-        .header-text p { font-size: 11px; opacity: 0.85; margin-top: 3px; }
-        .container { padding: 15px; max-width: 600px; margin: auto; padding-bottom: 40px; }
-        .search-bar { width: 100%; padding: 13px 16px; border: 2px solid #e8e8e8; border-radius: 12px; font-size: 15px; outline: none; margin-bottom: 15px; margin-top: 15px; }
-        .search-bar:focus { border-color: #1a3c6e; }
-        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
-        .stat-box { background: white; border-radius: 12px; padding: 10px 6px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
-        .stat-box strong { display: block; font-size: 20px; color: #1a3c6e; font-weight: bold; }
-        .stat-box span { font-size: 10px; color: #888; margin-top: 2px; display: block; }
-        .stat-box.green strong { color: #28a745; }
-        .stat-box.blue strong { color: #2196f3; }
-        .stat-box.red strong { color: #dc3545; }
-        .shortcut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
-        .shortcut-btn { background: white; border-radius: 14px; padding: 15px; text-align: center; text-decoration: none; box-shadow: 0 3px 10px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        .shortcut-btn .icon { font-size: 28px; }
-        .shortcut-btn .label { font-size: 12px; font-weight: bold; color: #1a3c6e; }
-        .btn-nouvelle { display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #1a3c6e, #2a6cb5); color: white; padding: 16px; border-radius: 14px; text-decoration: none; margin-bottom: 18px; font-size: 16px; font-weight: bold; box-shadow: 0 5px 15px rgba(26,60,110,0.35); }
-        .section-title { font-size: 15px; font-weight: bold; color: #1a3c6e; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-        .mission-card { background: white; border-radius: 16px; padding: 16px; margin-bottom: 14px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); border-left: 5px solid #1a3c6e; }
-        .mission-card.terminee { border-left-color: #2196f3; }
-        .mission-card.annulee { border-left-color: #dc3545; }
-        .mission-card h3 { color: #1a3c6e; font-size: 15px; margin-bottom: 8px; }
-        .mission-meta { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-        .mission-meta span { font-size: 12px; color: #666; }
-        .badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 10px; }
-        .badge-encours { background: #e3f2fd; color: #1565c0; }
-        .badge-terminee { background: #e3f2fd; color: #2196f3; }
-        .badge-annulee { background: #fce4ec; color: #c62828; }
-        .card-actions { display: flex; gap: 8px; }
-        .btn-voir { flex: 1; background: linear-gradient(135deg, #1a3c6e, #2a6cb5); color: white; padding: 11px; border-radius: 10px; text-decoration: none; font-size: 13px; font-weight: bold; text-align: center; }
-        .btn-supprimer { background: #ffebee; color: #c62828; padding: 11px 15px; border-radius: 10px; text-decoration: none; font-size: 14px; text-align: center; }
-        .empty { text-align: center; color: #aaa; margin-top: 50px; font-size: 14px; line-height: 2; }
-        .empty-icon { font-size: 50px; display: block; margin-bottom: 10px; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a3c6e 0%, #2a6cb5 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(26,60,110,0.4);
+        }
+
+        .header-logo {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .header-text {
+            padding: 10px 15px 15px;
+            text-align: center;
+        }
+
+        .header-text h1 {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .header-text p {
+            font-size: 11px;
+            opacity: 0.85;
+            margin-top: 3px;
+        }
+
+        .container {
+            padding: 15px;
+            max-width: 600px;
+            margin: auto;
+            padding-bottom: 40px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            margin-bottom: 15px;
+            margin-top: 15px;
+        }
+
+        .search-bar:focus {
+            border-color: #1a3c6e;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: white;
+            border-radius: 12px;
+            padding: 10px 6px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .stat-box strong {
+            display: block;
+            font-size: 20px;
+            color: #1a3c6e;
+            font-weight: bold;
+        }
+
+        .stat-box span {
+            font-size: 10px;
+            color: #888;
+            margin-top: 2px;
+            display: block;
+        }
+
+        .stat-box.green strong {
+            color: #28a745;
+        }
+
+        .stat-box.blue strong {
+            color: #2196f3;
+        }
+
+        .stat-box.red strong {
+            color: #dc3545;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .shortcut-btn {
+            background: white;
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .shortcut-btn .icon {
+            font-size: 28px;
+        }
+
+        .shortcut-btn .label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #1a3c6e;
+        }
+
+        .btn-nouvelle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #1a3c6e, #2a6cb5);
+            color: white;
+            padding: 16px;
+            border-radius: 14px;
+            text-decoration: none;
+            margin-bottom: 18px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(26,60,110,0.35);
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #1a3c6e;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mission-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            border-left: 5px solid #1a3c6e;
+        }
+
+        .mission-card.terminee {
+            border-left-color: #2196f3;
+        }
+
+        .mission-card.annulee {
+            border-left-color: #dc3545;
+        }
+
+        .mission-card h3 {
+            color: #1a3c6e;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .mission-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .mission-meta span {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .badge-encours {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .badge-terminee {
+            background: #e3f2fd;
+            color: #2196f3;
+        }
+
+        .badge-annulee {
+            background: #fce4ec;
+            color: #c62828;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-voir {
+            flex: 1;
+            background: linear-gradient(135deg, #1a3c6e, #2a6cb5);
+            color: white;
+            padding: 11px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn-supprimer {
+            background: #ffebee;
+            color: #c62828;
+            padding: 11px 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .empty {
+            text-align: center;
+            color: #aaa;
+            margin-top: 50px;
+            font-size: 14px;
+            line-height: 2;
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
+
 <body>
+
     <div class="header">
         <img src="/static/logo.jpg" class="header-logo" alt="Logo">
+
         <div class="header-text">
             <h1>Madagascar Guide Sylvie Tour's</h1>
             <p>Gestion logistique · Missions militaires</p>
@@ -61,76 +282,134 @@
     </div>
 
     <div class="container">
-        <input type="text" class="search-bar" id="searchBar" onkeyup="filterMissions()" placeholder="🔍 Rechercher une mission...">
+
+        <input type="text"
+               class="search-bar"
+               id="searchBar"
+               onkeyup="filterMissions()"
+               placeholder="🔍 Rechercher une mission...">
 
         <div class="stats-bar">
+
             <div class="stat-box">
                 <strong>{{ missions|length }}</strong>
                 <span>Total</span>
             </div>
+
             <div class="stat-box green">
-                <strong>{{ missions|selectattr('6', 'equalto', 'en cours')|list|length }}</strong>
+                <strong>{{ missions|selectattr('6', 'equalto', 'En cours')|list|length }}</strong>
                 <span>En cours</span>
             </div>
+
             <div class="stat-box blue">
-                <strong>{{ missions|selectattr('6', 'equalto', 'terminée')|list|length }}</strong>
+                <strong>{{ missions|selectattr('6', 'equalto', 'Terminée')|list|length }}</strong>
                 <span>Terminées</span>
             </div>
+
             <div class="stat-box red">
-                <strong>{{ missions|selectattr('6', 'equalto', 'annulée')|list|length }}</strong>
+                <strong>{{ missions|selectattr('6', 'equalto', 'Annulée')|list|length }}</strong>
                 <span>Annulées</span>
             </div>
+
         </div>
 
         <div class="shortcut-grid">
+
             <a href="/cartes_sim" class="shortcut-btn">
                 <span class="icon">📱</span>
                 <span class="label">Cartes SIM</span>
             </a>
+
             <a href="/packs_eau" class="shortcut-btn">
                 <span class="icon">💧</span>
                 <span class="label">Packs d'eau</span>
             </a>
+
         </div>
 
-        <a href="/nouvelle_mission" class="btn-nouvelle">➕ Nouvelle Mission</a>
+        <a href="/nouvelle_mission" class="btn-nouvelle">
+            ➕ Nouvelle Mission
+        </a>
 
-        <div class="section-title">📋 Missions</div>
+        <div class="section-title">
+            📋 Missions
+        </div>
 
         {% if missions %}
+
             {% for m in missions %}
-            <div class="mission-card {% if m[6] == 'terminée' %}terminee{% elif m[6] == 'annulée' %}annulee{% endif %}" id="card-{{ m[0] }}">
+
+            <div class="mission-card {% if m[6] == 'Terminée' %}terminee{% elif m[6] == 'Annulée' %}annulee{% endif %}"
+                 id="card-{{ m[0] }}">
+
                 <h3>{{ m[1] }}</h3>
+
                 <div class="mission-meta">
                     <span>🎖️ {{ m[2] }}</span>
                     <span>👥 {{ m[3] }} personne(s)</span>
                     <span>📅 {{ m[4] }} → {{ m[5] }}</span>
                 </div>
-                <span class="badge {% if m[6] == 'en cours' %}badge-encours{% elif m[6] == 'terminée' %}badge-terminee{% else %}badge-annulee{% endif %}">
+
+                <span class="badge
+                    {% if m[6] == 'En cours' %}
+                        badge-encours
+                    {% elif m[6] == 'Terminée' %}
+                        badge-terminee
+                    {% elif m[6] == 'Annulée' %}
+                        badge-annulee
+                    {% endif %}
+                ">
                     {{ m[6] }}
                 </span>
+
                 <div class="card-actions">
-                    <a href="/mission/{{ m[0] }}" class="btn-voir">👁️ Voir la mission</a>
-                    <a href="/supprimer_mission/{{ m[0] }}" class="btn-supprimer" onclick="return confirm('Supprimer cette mission ?')">🗑️</a>
+
+                    <a href="/mission/{{ m[0] }}" class="btn-voir">
+                        👁️ Voir la mission
+                    </a>
+
+                    <a href="/supprimer_mission/{{ m[0] }}"
+                       class="btn-supprimer"
+                       onclick="return confirm('Supprimer cette mission ?')">
+                        🗑️
+                    </a>
+
                 </div>
+
             </div>
+
             {% endfor %}
+
         {% else %}
+
             <div class="empty">
                 <span class="empty-icon">📭</span>
                 Aucune mission pour le moment.<br>
                 Créez votre première mission !
             </div>
+
         {% endif %}
+
     </div>
 
     <script>
-    function filterMissions() {
-        const search = document.getElementById('searchBar').value.toLowerCase();
-        document.querySelectorAll('.mission-card').forEach(card => {
-            card.style.display = card.innerText.toLowerCase().includes(search) ? 'block' : 'none';
-        });
-    }
+        function filterMissions() {
+
+            const search = document
+                .getElementById('searchBar')
+                .value
+                .toLowerCase();
+
+            document.querySelectorAll('.mission-card').forEach(card => {
+
+                card.style.display =
+                    card.innerText.toLowerCase().includes(search)
+                    ? 'block'
+                    : 'none';
+
+            });
+        }
     </script>
+
 </body>
 </html>
