@@ -707,15 +707,26 @@ def enregistrer_mission(mission_id):
     cursor = conn.cursor()
 
     cursor.execute("""
-        UPDATE missions
-        SET statut = 'En cours'
-        WHERE id = ?
-    """, (mission_id,))
-
+    UPDATE missions
+    SET statut = 'Terminée'
+    WHERE id = ?
+""", (mission_id,))
+    
     conn.commit()
     conn.close()
 
     return redirect(url_for('accueil'))
+
+conn = sqlite3.connect('sylvietours.db')
+cursor = conn.cursor()
+
+try:
+    cursor.execute("ALTER TABLE missions ADD COLUMN statut TEXT DEFAULT 'En cours'")
+    conn.commit()
+except:
+    pass
+
+conn.close()
 
 if __name__ == '__main__':
     init_db()
