@@ -297,17 +297,17 @@
             </div>
 
             <div class="stat-box green">
-                <strong>{{ missions|selectattr('6', 'equalto', 'En cours')|list|length }}</strong>
+                <strong>{{ missions_en_cours }}</strong>
                 <span>En cours</span>
             </div>
 
             <div class="stat-box blue">
-                <strong>{{ missions|selectattr('6', 'equalto', 'Terminée')|list|length }}</strong>
+                <strong>{{ missions_terminees }}</strong>
                 <span>Terminées</span>
             </div>
 
             <div class="stat-box red">
-                <strong>{{ missions|selectattr('6', 'equalto', 'Annulée')|list|length }}</strong>
+                <strong>{{ missions_annulees }}</strong>
                 <span>Annulées</span>
             </div>
 

@@ -171,7 +171,18 @@ def accueil():
     c.execute("SELECT * FROM missions ORDER BY id DESC")
     missions = c.fetchall()
     conn.close()
-    return render_template('accueil.html', missions=missions)
+
+    missions_en_cours = len([m for m in missions if len(m) > 6 and str(m[6]).strip().lower() == 'en cours'])
+    missions_terminees = len([m for m in missions if len(m) > 6 and str(m[6]).strip().lower() == 'terminée'])
+    missions_annulees = len([m for m in missions if len(m) > 6 and str(m[6]).strip().lower() == 'annulée'])
+
+    return render_template(
+        'accueil.html',
+        missions=missions,
+        missions_en_cours=missions_en_cours,
+        missions_terminees=missions_terminees,
+        missions_annulees=missions_annulees
+    )
 
 @app.route('/nouvelle_mission', methods=['GET', 'POST'])
 def nouvelle_mission():
